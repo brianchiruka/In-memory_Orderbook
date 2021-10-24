@@ -22,7 +22,6 @@ const orderSchema = new mongoose.Schema({
     uppercase: true,
     required: [true, "Please specify the currency pair of your order."],
   },
-  orderCount: { type: Number, default: 1 },
 });
 
 const orderbookSchema = new mongoose.Schema({
@@ -52,4 +51,4 @@ orderbookSchema.post("save", (doc, next) => {
   next();
 });
 
-module.exports = mongoose.model("order", orderbookSchema);
+module.exports = mongoose.model("orderbook", orderbookSchema);

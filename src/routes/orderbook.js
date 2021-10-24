@@ -22,7 +22,19 @@ router.post("/limitorder", async (req, res) => {
   });
 
   try {
-    const newOrder = await order.save();
+    const newOrder = await order.save((err, doc) => {
+      if (err) res.send(err);
+      Order.find(
+        side,
+        { $push: { _comments: doc._id } },
+        { new: true },
+        (err, order) => {
+          if (err) res.send(err);
+          res.json({ doc });
+        }
+      );
+    });
+
     res.status(201).json({ id: newOrder._id });
   } catch (err) {
     res.status(400).json({ message: err.message });
