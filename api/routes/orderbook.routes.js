@@ -1,12 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const Order = require("../models/orderbook");
+const Order = require("../../database/models/orderbook.model");
 
 //Getting the whole orderbook
 router.get("/", async (req, res) => {
   try {
     //fetch data once into a temp constant, then find from it to sort before responding
-    const orderbook = await Order.find();
+    const orderbook = {
+      Asks: await Order.find({ side: "sell" }).select("-_id -__v"),
+      Bids: await Order.find({ side: "buy" }).select("-_id -__v"),
+    };
     res.json(orderbook);
   } catch {
     (err) => res.status(500).json({ message: err.message });
@@ -20,22 +23,13 @@ router.post("/limitorder", async (req, res) => {
     price: req.body.price,
     currencyPair: req.body.currencyPair,
   });
-
+  console.log(order);
   try {
     const newOrder = await order.save((err, doc) => {
       if (err) res.send(err);
-      Order.find(
-        side,
-        { $push: { _comments: doc._id } },
-        { new: true },
-        (err, order) => {
-          if (err) res.send(err);
-          res.json({ doc });
-        }
-      );
     });
 
-    res.status(201).json({ id: newOrder._id });
+    res.status(201).json("should be done go and check");
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
