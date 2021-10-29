@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "jest --runInBand ./test"
+    "test": "jest --watchAll=true --runInBand --detectOpenHandles"
   },
   "author": "",
   "license": "ISC",

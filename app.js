@@ -5,7 +5,7 @@ const tradehistoryRouter = require("./api/routes/tradehistory.route");
 const limitorderRouter = require("./api/routes/limitorder.route");
 const {
   connectOrderbook,
-} = require("./database/utils/test-utils/dbHandler.utils");
+} = require("./database/utils/dbHandler.utils");
 
 // Configuring routes and server.
 connectOrderbook();

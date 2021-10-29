@@ -1,9 +1,7 @@
 {
   "folders": [
-	{
-		"name": "In-memory_Orderbook",
-		"path": "."
-	}
-],
-  "settings": {}
+    {
+      "path": "."
+    }
+  ]
 }
