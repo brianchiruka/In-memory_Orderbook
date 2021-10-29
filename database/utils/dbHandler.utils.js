@@ -1,14 +1,13 @@
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
-let mongo = MongoMemoryServer;
-
 /**
  * Connect to the in-memory database.
  */
+let mongoServer = undefined;
+
 module.exports.connectOrderbook = async () => {
   const mongoServer = await MongoMemoryServer.create();
-
   const mongoUri = mongoServer.getUri();
 
   const mongooseOpts = {
@@ -32,9 +31,11 @@ module.exports.connectOrderbook = async () => {
  * Drop database, close the connection and stop mongod.
  */
 module.exports.disconnectOrderbook = async () => {
-  await mongoose.connection.dropDatabase();
-  await mongoose.connection.close();
-  await mongo.stop();
+  if (mongoServer) {
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
+    await mongoServer.stop();
+  }
 };
 
 /**

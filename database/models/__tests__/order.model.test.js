@@ -1,46 +1,33 @@
-const Course = require("../course.model");
-const User = require("../user.model");
-const { fakeBuyOrderData } = require("../../fixtures");
+const OrderModel = require("../order.model");
+const { fakeBuyOrderData } = require("../../fixtures/dummyData");
 const {
   validateNotEmpty,
-  validateArrayLength,
   validateStringEquality,
-  validateArrayContaining,
-} = require("../../../utils/test-utils/validators.utils");
+  validateEquality,
+} = require("../../utils/validators.utils");
 const {
-  dbConnect,
-  dbDisconnect,
-} = require("../../../utils/test-utils/dbHandler.utils");
+  connectOrderbook,
+  disconnectOrderbook,
+  clearOrderbook,
+} = require("../../utils/dbHandler.utils");
 
-beforeAll(async () => dbConnect());
-afterEach(async () => clearDatabase());
-afterAll(async () => dbDisconnect());
+beforeAll(async () => connectOrderbook());
+afterEach(async () => clearOrderbook());
+afterAll(async () => disconnectOrderbook());
 
 describe("Order Model Test Suite", () => {
   test("should validate saving a new order successfully", async () => {
-    const validOrder = new Order({
-      Asks: fakeBuyOrderData,
-    });
-    const savedStudentUser = await validStudentUser.save();
+    const validOrder = new OrderModel(fakeBuyOrderData);
+    const savedOrder = await validOrder.save();
 
-    validateNotEmpty(savedStudentUser);
-    validateStringEquality(savedStudentUser.role, fakeUserData.role);
-    validateStringEquality(savedStudentUser.local.email, fakeUserData.email);
-    validateStringEquality(
-      savedStudentUser.local.username,
-      fakeUserData.username
-    );
-    validateStringEquality(
-      savedStudentUser.local.password,
-      fakeUserData.password
-    );
-    validateStringEquality(
-      savedStudentUser.local.firstName,
-      fakeUserData.firstName
-    );
-    validateStringEquality(
-      savedStudentUser.local.lastName,
-      fakeUserData.lastName
-    );
+    validateNotEmpty(savedOrder);
+
+    validateStringEquality(savedOrder.side, fakeBuyOrderData.side);
+
+    validateEquality(savedOrder.currencyPair, fakeBuyOrderData.currencyPair);
+
+    validateEquality(savedOrder.price, fakeBuyOrderData.price);
+
+    validateEquality(savedOrder.quantity, fakeBuyOrderData.quantity);
   });
 });
