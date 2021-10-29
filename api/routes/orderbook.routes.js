@@ -1,92 +1,76 @@
 const express = require("express");
-const { model } = require("mongoose");
 const router = express.Router();
-const Order = require("../../database/models/order.model");
+const OrderModel = require("../../database/models/order.model");
+const TradeHistoryModel = require("../../database/models/tradehistory.model");
 const {
-  dbConnect,
-  dbDisconnect,
-} = require("../../database/utils/test-utils/dbHandler.utils");
+  saveOrder,
+  updateOrder,
+  saveTrade,
+} = require("../../database/helpers/limitorder.helperFunctions");
 
 //Getting the whole orderbook
 router.get("/", async (req, res) => {
-  async () => dbConnect();
   try {
     //fetch data once into a temp constant, then find from it to sort before responding
     const orderbook = {
-      Asks: await Order.find({ side: "sell" })
-        // .select("-_id -__v")
+      Asks: await OrderModel.find({ side: "sell" })
+        .select("-_id -__v")
         .sort("price"),
-      Bids: await Order.find({ side: "buy" })
-        // .select("-_id -__v")
+      Bids: await OrderModel.find({ side: "buy" })
+        .select("-_id -__v")
         .sort("-price"),
     };
 
     res.json(orderbook);
-    async () => dbDisconnect();
   } catch {
     (err) => {
-      async () => dbDisconnect();
       res.status(500).json({ message: err.message });
     };
   }
 });
-//Placing a limit order
-router.post("/limitorder", async (req, res) => {
-  ////////////////////////////////////////////////////////down
-  // Order.aggregate([
-  //   {
-  //     $project: {
-  //       id: "$_id",
-  //       priceMatch: { $eq: ["$price", req.body.price] },
-  //       orderCount: "$orderCount",
-  //       quantity: "$quantity",
-  //     },
-  //   },
-  // ])
-  //   .then((orders) => {
-  //     orders.forEach((order) => {
-  //       // console.log(order);
-  //       const orderMatchedByPrice = order._id;
-  //       const orderMatchedByPriceI = order.id;
-  //       const updatedOrderCount = order.orderCount + 1;
-  //       console.log(orderMatchedByPrice);
-  //       console.log(orderMatchedByPriceI);
-  //       Order.findOneAndUpdate(
-  //         orderMatchedByPrice,
-  //         { orderCount: updatedOrderCount },
-  //         // [(upsert = true)],
-  //         console.log("done!!!!!!")
-  //       );
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     throw err;
-  //   });
 
-  ////////////////////////////////////////////////////////up
-  async () => dbConnect();
+//Getting the trade history
+router.get("/tradehistory", async (req, res) => {
   try {
-    const newOrder = new Order(req.body);
-
-    await newOrder.save((err, doc) => {
-      if (err) res.send(err);
-    });
-
-    res.status(201).json(`id: ${newOrder._id}`);
-    async () => dbDisconnect();
+    const tradeHistory = await TradeHistoryModel.find();
+    res.json(tradeHistory);
   } catch (err) {
-    res.status(400).json({ message: err.message });
-    async () => dbDisconnect();
+    res.status(500).json({ message: err.message });
   }
 });
 
-router.get("/tradehistory", (req, res) => {
-  async () => dbConnect();
-  const changeStream = Order.watch().on("change", (change) =>
-    console.log(change)
-  );
-  res.send(req.params.id);
-  async () => dbDisconnect();
+//Placing a limit order
+router.post("/limitorder", async (req, res) => {
+  //
+  //test price here
+  //
+  OrderModel.findOne({ price: req.body.price })
+    .then((matchedOrderByPrice) => {
+      if (matchedOrderByPrice == null) {
+        saveOrder();
+
+        console.log("Unique order saved!");
+      } else {
+        let updateOrderQuery = {};
+        if (matchedOrderByPrice.side === req.body.side) {
+          updateOrderQuery = {
+            $inc: { quantity: req.body.quantity, orderCount: 1 },
+          };
+          updateOrder(updateOrderQuery);
+        } else {
+          updateOrderQuery = { $inc: { quantity: -req.body.quantity } };
+          updateOrder(updateOrderQuery);
+          const tradeLog = {
+            price: matchedOrderByPrice.price,
+            quantity: matchedOrderByPrice.quantity,
+            currencyPair: matchedOrderByPrice.currencyPair,
+            takerSide: req.body.side,
+          };
+          saveTrade(tradeLog);
+        }
+      }
+    })
+    .catch((err) => console.error(err));
 });
 
 //Fetching by filter
@@ -94,17 +78,12 @@ router.get("/:id", (req, res) => {
   res.send(req.params.id);
 });
 
-//Delete limit order
-// router.delete("/:id", (req, res) => {
-//   req.params.id;
-// });
-
 /***
  * FOR TESTING PURPOSES
  */
 //Delete limit order
 router.delete("/throwawaythedata", async (req, res) => {
-  const newOrderbook = await Order.deleteMany();
+  const newOrderbook = await OrderModel.deleteMany();
   res.send(newOrderbook);
 });
 
