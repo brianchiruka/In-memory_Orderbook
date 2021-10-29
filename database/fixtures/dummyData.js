@@ -8,14 +8,14 @@ exports.fakeOrderbookData = {
 
 exports.fakeBuyOrderData = {
   side: "buy",
-  quantity: 0.025,
+  quantity: 0.125,
   price: 920000,
   currencyPair: "BTCZAR",
 };
 
 exports.fakeSellOrderData = {
   side: "sell",
-  quantity: 0.025,
+  quantity: 0.125,
   price: 920000,
   currencyPair: "BTCZAR",
 };
