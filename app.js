@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
-const orderbookRouter = require("./api/routes/orderbook.routes");
+const orderbookRouter = require("./api/routes/orderbook.route");
+const tradehistoryRouter = require("./api/routes/tradehistory.route");
+const limitorderRouter = require("./api/routes/limitorder.route");
 
 // Connecting to the in-memory database.
 
@@ -38,5 +40,7 @@ connectToMongoDb();
 app.use(express.json());
 
 app.use("/orderbook", orderbookRouter);
+app.use("/", tradehistoryRouter);
+app.use("/orders", limitorderRouter);
 
 app.listen(8000, () => console.log("Server Started"));
