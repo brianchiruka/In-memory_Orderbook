@@ -61,7 +61,7 @@ OR
 npm run test
 ```
 
-To run tests and see the code coverage. RUn using the command:
+To run tests and see the code coverage. Run using the command:
 
 ```
 npm run coverage
