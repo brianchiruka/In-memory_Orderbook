@@ -6,22 +6,32 @@ let mongo = MongoMemoryServer;
 /**
  * Connect to the in-memory database.
  */
-module.exports.dbConnect = async () => {
-  mongo = await MongoMemoryServer.create();
-  const uri = mongo.getUri();
+module.exports.connectOrderbook = async () => {
+  const mongoServer = await MongoMemoryServer.create();
+
+  const mongoUri = mongoServer.getUri();
 
   const mongooseOpts = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   };
 
-  await mongoose.connect(uri, mongooseOpts);
+  mongoose.connect(mongoUri, mongooseOpts);
+
+  mongoose.connection.on("error", (err) => {
+    if (err.message.code === "ETIMEDOUT") {
+      throw err;
+      mongoose.connect(mongoUri, mongooseOpts);
+    }
+    throw err;
+  });
+  console.log(`Connected to orderbook on ${mongoUri}`);
 };
 
 /**
  * Drop database, close the connection and stop mongod.
  */
-module.exports.dbDisconnect = async () => {
+module.exports.disconnectOrderbook = async () => {
   await mongoose.connection.dropDatabase();
   await mongoose.connection.close();
   await mongo.stop();
@@ -30,7 +40,7 @@ module.exports.dbDisconnect = async () => {
 /**
  * Remove all the data for all db collections.
  */
-module.exports.clearDatabase = async () => {
+module.exports.clearOrderbook = async () => {
   const collections = mongoose.connection.collections;
 
   for (const key in collections) {

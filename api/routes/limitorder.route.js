@@ -35,6 +35,7 @@ router.post("/limitorder", async (req, res) => {
    * updateOrder(): update the order quantity on the document with price that matches request price.
    * and saveTrade(): runs updateOrder() to decrement the quantity of the order then logs the trade in TradeHistoryModel
    *
+   * TODO: abstract this to middleware and controller modules
    *  */
 
   const saveOrder = async () => {
