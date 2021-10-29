@@ -1,15 +1,12 @@
-require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const orderbookRouter = require("./api/routes/orderbook.routes");
 
-/**
- * Connect to the in-memory database. CONFIRM CONFIRM CONFIRM CONFIRM
- */
+// Connecting to the in-memory database.
 
-const connectDb = async () => {
+const connectToMongoDb = async () => {
   const mongoServer = await MongoMemoryServer.create();
 
   const mongoUri = mongoServer.getUri();
@@ -28,12 +25,15 @@ const connectDb = async () => {
     }
     throw err;
   });
+
   mongoose.connection.once("open", () => {
     console.log(`MongoDB successfully connected to ${mongoUri}`);
   });
 };
 
-connectDb();
+connectToMongoDb();
+
+// Configuring routes and server.
 
 app.use(express.json());
 

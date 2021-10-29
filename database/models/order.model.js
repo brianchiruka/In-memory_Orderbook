@@ -22,10 +22,10 @@ const orderSchema = new Schema({
     required: [true, "Please specify the currency pair of your order."],
     uppercase: true,
   },
-  // orderCount: {
-  //   type: Number,
-  //   default: 1,
-  // },
+  orderCount: {
+    type: Number,
+    default: 1,
+  },
 });
 
 module.exports = model("Order", orderSchema);
