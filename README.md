@@ -36,17 +36,10 @@ This should retrieve all the necessary dependencies named in the [package.json](
 
 ### How To Use:
 
-Once dependencies are installed, be sure to include a `.env` file with the necessary environment variable:
+Once dependencies are installed, the application can be run locally using:
 
 ```
-LOCAL_MONGO_URI = <mongodb uri goes here...>
-PORT = <port number goes here...>
-```
-
-When everything is in place, the application can be run locally using:
-
-```
-npm run dev
+nodemon app
 ```
 
 ## Running tests 🧪
@@ -59,10 +52,4 @@ npm test
 OR
 
 npm run test
-```
-
-To run tests and see the code coverage. Run using the command:
-
-```
-npm run coverage
 ```
