@@ -1,15 +1,14 @@
 const TradehistoryModel = require("../tradehistory.model");
-const { fakeTrade } = require("../../fixtures/dummyData");
+const { fakeTrade } = require("../../../utils/test_utils/dummyData");
 const {
   validateNotEmpty,
   validateStringEquality,
-  validateEquality,
-} = require("../../utils/validators.utils");
+} = require("../../../utils/test_utils/validators.utils");
 const {
   connectOrderbook,
   disconnectOrderbook,
   clearOrderbook,
-} = require("../../utils/dbHandler.utils");
+} = require("../../../utils/global_utils/dbHandler.utils");
 
 beforeAll(async () => connectOrderbook());
 afterEach(async () => clearOrderbook());

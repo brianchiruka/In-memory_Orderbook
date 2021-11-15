@@ -3,9 +3,7 @@ const { Schema, model } = require("mongoose");
 const orderSchema = new Schema({
   side: {
     type: String,
-    match: /(?:^|\W)buy(?:$|\W)|(?:^|\W)sell(?:$|\W)/i,
     required: true,
-    message: "Please specify order type as 'buy' or 'sell'.",
     lowercase: true,
   },
   quantity: {
@@ -21,10 +19,6 @@ const orderSchema = new Schema({
     type: String,
     required: [true, "Please specify the currency pair of your order."],
     uppercase: true,
-  },
-  orderCount: {
-    type: Number,
-    default: 1,
   },
 });
 

@@ -3,9 +3,7 @@ const app = express();
 const orderbookRouter = require("./api/routes/orderbook.route");
 const tradehistoryRouter = require("./api/routes/tradehistory.route");
 const limitorderRouter = require("./api/routes/limitorder.route");
-const {
-  connectOrderbook,
-} = require("./database/utils/dbHandler.utils");
+const { connectOrderbook } = require("./utils/global_utils/dbHandler.utils");
 
 // Configuring routes and server.
 connectOrderbook();

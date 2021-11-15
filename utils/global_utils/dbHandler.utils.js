@@ -24,7 +24,7 @@ module.exports.connectOrderbook = async () => {
     }
     throw err;
   });
-  console.log(`Connected to orderbook on ${mongoUri}`);
+  console.log(`Connected to orderbook: ${mongoUri}`);
 };
 
 /**
