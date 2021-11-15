@@ -14,8 +14,8 @@ beforeAll(async () => connectOrderbook());
 afterEach(async () => clearOrderbook());
 afterAll(async () => disconnectOrderbook());
 
-describe("Order Model Test Suite", () => {
-  test("should validate saving a new order successfully", async () => {
+describe("Trade History Model Test Suite", () => {
+  test("should validate saving a new trade successfully", async () => {
     const validTrade = new TradehistoryModel(fakeTrade);
     const savedTrade = await validTrade.save();
 

@@ -6,6 +6,57 @@ A simple In-memory database built with Node.js.
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
+### File tree
+
+┣ 📂node_modules
+┣ 📂api
+┃ ┣ 📂assets
+┃ ┃ ┗ 📜orderflow.png
+┃ ┣ 📂controllers
+┃ ┃ ┣ 📂**test**
+┃ ┃ ┃ ┣ 📜saveOrder.controller.test.js
+┃ ┃ ┃ ┣ 📜saveTradeLog.controller.test.js
+┃ ┃ ┃ ┣ 📜tradeAndUpdateOrderbook.controller.test.js
+┃ ┃ ┃ ┗ 📜tradeHandler.controller.test.js
+┃ ┃ ┣ 📜index.js
+┃ ┃ ┣ 📜saveOrder.controller.js
+┃ ┃ ┣ 📜saveTradeLog.controller.js
+┃ ┃ ┣ 📜tradeAndUpdateOrderbook.controller.js
+┃ ┃ ┗ 📜tradeHandler.controller.js
+┃ ┣ 📂middleware
+┃ ┃ ┣ 📂**tests**
+┃ ┃ ┃ ┣ 📜fetchOrderbook.middleware.test.js
+┃ ┃ ┃ ┣ 📜fetchTradeHistory.middleware.test.js
+┃ ┃ ┃ ┗ 📜limitOrder.middleware.test.js
+┃ ┃ ┣ 📜fetchOrderbook.middleware.js
+┃ ┃ ┣ 📜fetchTradeHistory.middleware.js.js
+┃ ┃ ┣ 📜index.js
+┃ ┃ ┗ 📜limitOrder.middleware.js
+┃ ┗ 📂routes
+┃ ┃ ┣ 📜limitorder.route.js
+┃ ┃ ┣ 📜orderbook.route.js
+┃ ┃ ┗ 📜tradehistory.route.js
+┣ 📂database
+┃ ┗ 📂models
+┃ ┃ ┣ 📂**tests**
+┃ ┃ ┃ ┣ 📜order.model.test.js
+┃ ┃ ┃ ┗ 📜tradehistory.model.test.js
+┃ ┃ ┣ 📜order.model.js
+┃ ┃ ┗ 📜tradehistory.model.js
+┣ 📂utils
+┃ ┣ 📂global_utils
+┃ ┃ ┗ 📜dbHandler.utils.js
+┃ ┗ 📂test_utils
+┃ ┃ ┣ 📜dummyData.js
+┃ ┃ ┣ 📜interceptors.utils.js
+┃ ┃ ┗ 📜validators.utils.js
+┣ 📜.gitignore
+┣ 📜app.js
+┣ 📜package-lock.json
+┣ 📜package.json
+┣ 📜README.md
+┗ 📜route.rest
+
 ### Prerequisites
 
 What things you need to install the software and how to install them.
